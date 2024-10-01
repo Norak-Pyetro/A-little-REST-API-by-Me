@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ler Todos os Diretores</title>
+    </head>
+    <body>
+        <p> Mostrar todos os diretores </p>
+        <button id = "btnReadAll"> Ler Todos os Registros </button><br>
+        <div id = "divDados"></div>
+    </body>
+    <script>
+        const dadoslocalStorage = localStorage.getItem("dados");
+        const obj_Usuario = JSON.parse(dadoslocalStorage);
+
+        const divDados = document.getElementById("divDados");
+        const btnButton = document.getElementById("btnReadAll");
+
+        const tabela = document.createElement("table");
+        divDados.appendChild(tabela);
+        const linha1 = document.createElement("tr");
+        const td1 = document.createElement("td");
+        const td2 = document.createElement("td");
+        const td3 = document.createElement("td");
+        const td4 = document.createElement("td");
+        linha1.appendChild(td1);
+        linha1.appendChild(td2);
+        linha1.appendChild(td3);
+        linha1.appendChild(td4);
+        td1.appendChild(document.createTextNode("ID do Diretor"));
+        td2.appendChild(document.createTextNode("Nome Diretores"));
+        td3.appendChild(document.createTextNode("Projetos"));
+        td4.appendChild(document.createTextNode("Email"));
+        btnButton.onclick = function(){
+            const uri = "/diretor";
+            fetch(uri, {
+                method : "GET",
+                headers : {
+                    'Accept' : 'application/json',
+                    'Content-Type' : 'application/json',
+                    // 'Authorization' : 'Bearer' + obj_Usuario
+                }
+            }).then((resposta_BackEnd)=>{
+                return resposta_BackEnd.text();
+            }).then((tempo_resposta_back)=>{
+                console.log(tempo_resposta_back);
+                ConstruirTabela(tempo_resposta_back);
+            }).catch((error)=>{
+                console.log(error);
+            })
+        }
+
+        function Demitir_Diretor(idDiretores){
+            const uri = "/diretor/" + idDiretores;
+            fetch(uri, {
+                method : "DELETE",
+                headers : {
+                    'Accept' : 'application/json',
+                    'Content-Type' : 'application/json',
+                    // 'Authorization' : 'Bearer' + obj_Usuario
+                }
+            }).then((resposta_BackEnd)=>{
+                return resposta_BackEnd.text();
+            }).then((tempo_resposta_back)=>{
+                console.log(tempo_resposta_back);
+            }).catch((error)=>{
+                console.log(error);
+            })
+        }
+        
+        function limparTabela(){
+            var qtdLinhas = 1;
+            var totalLinha = tabela.rows.length;
+            for(let i=qtdLinhas; i<totalLinha; i++){
+                tabela.deleteRow(qtdLinhas);
+            }
+        }
+
+        function ConstruirTabela(textoJson){
+            limparTabela();
+
+            const objJson = JSON.parse(textoJson);
+
+            const Diretores = objJson.Diretores;
+            
+            tabela.appendChild(linha1);
+            for (let Diretor of Diretores){
+                const linha1 = document.createElement("tr");
+                const btnExcluir = document.createElement("button");
+                btnExcluir.appendChild(document.createTextNode("Demitir"));
+                btnExcluir.onclick = function(){
+                    const idDiretores = Diretor.idDiretores;
+                    Demitir_Diretor();
+                }
+                const td1 = document.createElement("td");
+                const td2 = document.createElement("td");
+                const td3 = document.createElement("td");
+                const td4 = document.createElement("td");
+                td1.appendChild(document.createTextNode(Diretor.idDiretores));
+                td2.appendChild(document.createTextNode(Diretor.NomeDiretores));
+                td3.appendChild(document.createTextNode(Diretor.Projetos));
+                td4.appendChild(document.createTextNode(Diretor.Email));
+                linha1.appendChild(td1);
+                linha1.appendChild(td2);
+                linha1.appendChild(td3);
+                linha1.appendChild(td4);
+                linha1.appendChild(btnExcluir);
+                tabela.appendChild(linha1);
+            }
+        }
+    </script>
+</html>

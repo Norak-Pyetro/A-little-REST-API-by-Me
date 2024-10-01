@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Create Diretores</title>
+    </head>
+    <body>
+        <p>Arquivo para Criar novo Diretor</p><br>
+        <div>
+            <input type = "number" id = "txtId" placeholder="ID">
+        </div>
+        <div>
+            <input type = "text" id = "txtNome" placeholder="Nome">
+        </div>
+        <div>
+            <input type = "text" id = "txtProjetos" placeholder="Projetos">
+        </div>
+        <div>
+            <input type = "email" id = "txtEmail" placeholder="Email">
+        </div>
+        <div>
+            <input type = "password" id = "txtSenha" placeholder="Senha">
+        </div>
+        <div>
+            <button id='btnCreate'>Cadastrar</button>
+        </div>
+        <div id = "divResposta"></div>
+    </body>
+    <script>
+        const ID = document.getElementById("txtId");
+        const Nome = document.getElementById("txtNome");
+        const Projetos = document.getElementById("txtProjetos");
+        const Email = document.getElementById("txtEmail");
+        const Senha = document.getElementById("txtSenha");
+        const btnButton = document.getElementById("btnCreate");
+        
+
+        btnButton.onclick = function(){
+            Create();
+        }
+
+        function Create(){
+            const id_Diretores = ID.value;
+            const NomeDiretores = Nome.value;
+            const Projetos_Diretores = Projetos.value;
+            const Email_Diretores = Email.value;
+            const Senha_Diretores = Senha.value;
+
+            if(id_Diretores == "" || NomeDiretores== "" || Projetos_Diretores == "" || Email_Diretores == "" || Senha_Diretores == ""){
+                alert("NENHUMA CAIXA DE TEXTE DEVE ESTAR VAZIA!!!");
+                return;
+            }
+
+            const obj_Json = {
+                diretor: {
+		            idDiretores: id_Diretores,
+		            NomeDiretores: NomeDiretores,
+		            Projetos: Projetos_Diretores,
+		            Email: Email_Diretores,
+		            Senha: Senha_Diretores
+	            }
+            }
+            const uri = "/diretor";
+            fetch(uri, {
+                method : "POST",
+                body : JSON.stringify(obj_Json),
+                headers : {
+                    'Accept' : 'application/json',
+                    'Content-Type' : 'application/json',
+                    // 'Authorization' : 'Bearer' + obj_Usuario
+                }
+            }).then((resposta_BackEnd)=>{
+                return resposta_BackEnd.text();
+            }).then((tempo_resposta_back)=>{
+                console.log(tempo_resposta_back);
+            }).catch((error)=>{
+                console.log(error);
+            })
+        }
+    </script>
+</html>

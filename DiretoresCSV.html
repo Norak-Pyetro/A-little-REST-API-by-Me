@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ler Arquivos CSV</title>
+    </head>
+    <body>
+        <input type = "file" id = "txtArquivo">
+
+        <button id = "btnCSV"> Ler Arquivo </button><br>
+    </body>
+    <script>
+        const txtArquivo = document.getElementById("txtArquivo");
+        const btnCSV = document.getElementById("btnCSV");
+
+        btnCSV.onclick = function(){
+            const dados = new FormData();
+            dados.append("variavelArquivo", txtArquivo.files[0]);
+            dados.append(txtArquivo.files[0]);
+            fetch(uri, {
+                method : "POST",
+                headers : {
+                    // 'Authorization' : 'Bearer' + obj_Usuario
+                },
+                body: dados
+            }).then((resposta_BackEnd)=>{
+                return resposta_BackEnd.text();
+            }).then((tempo_resposta_back)=>{
+                console.log(tempo_resposta_back);
+                const resposta = JSON.parse(tempo_resposta_back);
+                if (resposta.status == true){
+                    alert ("Diretores contratados com sucesso");
+                }
+            }).catch((error)=>{
+                console.log(error);
+            })
+        }
+    </script>
+</html>

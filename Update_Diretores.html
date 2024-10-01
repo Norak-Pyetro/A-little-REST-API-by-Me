@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Atualizar Diretores</title>
+    </head>
+    <body>
+        <p>Atualizar dados de diretores:</p><br>
+        <div>
+            <input type = "number" id = "txtId" placeholder = "ID">
+        </div>
+        <div>
+            <input type = "text" id = "txtNome" placeholder = "Nome">
+        </div>
+        <div>
+            <input type = "text" id = "txtProjetos" placeholder = "Projetos">
+        </div>
+        <div>
+            <input type = "text" id = "txtEmail" placeholder = "Email">
+        </div>
+        <div>
+            <input type = "password" id = "txtSenha" placeholder = "Senha">
+        </div>
+        <div>
+            <button id='btnUpdate'>Atualizar Diretor</button>
+        </div>
+    </body>
+    <script>
+        const ID = document.getElementById("txtId");
+        const Nome = document.getElementById("txtNome");
+        const Projetos = document.getElementById("txtProjetos");
+        const Email = document.getElementById("txtEmail");
+        const Senha = document.getElementById("txtSenha");
+        const btnButton = document.getElementById("btnUpdate");
+
+        btnButton.onclick = function(){
+            Update();
+        }
+
+        function Update(){
+            const id_Diretores = ID.value;
+            const NomeDiretores = Nome.value;
+            const Projetos_Diretores = Projetos.value;
+            const Email_Diretores = Email.value;
+            const Senha_Diretores = Senha.value;
+
+            if(NomeDiretores== "" || Projetos_Diretores == "" || Email_Diretores == "" || Senha_Diretores == ""){
+                alert("NENHUMA CAIXA DE TEXTE DEVE ESTAR VAZIA!!!");
+                return;
+            }
+
+            const obj_Json = {
+                diretor:{
+		            NomeDiretores: NomeDiretores,
+		            Projetos: Projetos_Diretores,
+		            Email: Email_Diretores,
+		            Senha: Senha_Diretores
+	            }
+            }
+            const uri = "/diretor/" + id_Diretores;
+            fetch(uri, {
+                method: 'PUT',
+                body: JSON.stringify(obj_Json),
+                headers : {
+                    'Accept' : 'application/json',
+                    'Content-Type' : 'application/json',
+                    // 'Authorization' : 'Bearer' + obj_Usuario
+                }
+            }).then((resposta_BackEnd)=>{
+                return resposta_BackEnd.text();
+            }).then((tempo_resposta_back)=>{
+                console.log(tempo_resposta_back);
+            }).catch((error)=>{
+                console.log(error);
+            })
+        }
+    </script>
+</html>

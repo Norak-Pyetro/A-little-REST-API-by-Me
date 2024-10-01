@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ler Por Id Diretores</title>
+    </head>
+    <body>
+        <p>Ler por ID</p>
+        <div>
+            <input type = "number" id = "numID" placeholder="Insira aqui o ID">
+        </div>
+        <div>
+            <button id = "btnReadById"> Ler Todos os Registros </button><br>
+        </div>
+        <div id = "divDados"></div>
+    </body>
+    <script>
+        const divDados = document.getElementById("divDados");
+        const ID = document.getElementById("numID");
+        const btnButton = document.getElementById("btnReadById");
+
+        btnButton.onclick = function(){
+            const ID_Diretores = ID.value;
+            if (ID_Diretores == ""){
+                alert ("DIGITE UMA ID VÁLIDA!!!");
+                return;
+            }
+            const uri = "/diretor/" + ID_Diretores;
+            fetch(uri, {
+                method : "GET",
+                headers : {
+                    'Accept' : 'application/json',
+                    'Content-Type' : 'application/json',
+                    // 'Authorization' : 'Bearer' + obj_Usuario
+                }
+            }).then((resposta_BackEnd)=>{
+                return resposta_BackEnd.text();
+            }).then((tempo_resposta_back)=>{
+                console.log(tempo_resposta_back);
+            }).catch((error)=>{
+                console.log(error);
+            })
+        }
+
+    </script>
+</html>

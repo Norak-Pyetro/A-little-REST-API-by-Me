@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang = "pt-br">
+    <head>
+        <title>Login</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div>
+            email : <input type = 'email' id = 'txtEmail'>
+        </div>
+        <div>
+            senha : <input type = 'password' id = 'txtSenha'>
+        </div>
+        <div>
+            <button id='btnLogin'>Logar</button>
+        </div>
+        <div id="divResposta"></div><br><br>
+
+        <p href="Create_Diretores.html">Create Diretores</p><br>
+        <p href="">Read By Id Diretores</p>
+
+        <script>
+            const btnLogin = document.getElementById("btnLogin");
+            const txtEmail = document.getElementById("txtEmail");
+            const txtSenha = document.getElementById("txtSenha");
+
+            btnLogin.onclick = function (){
+                Login();
+            }
+            function Login(){
+                const email = txtEmail.value;
+                const senha = txtSenha.value;
+
+                if (email == "", senha == ""){
+                    alert ("POR FAVOR, PREENCHER TODAS AS CAIXAS DE TEXTO!!!");
+                    return;
+                }
+
+                const obj_Json = {
+                    diretor: {
+                        email : email,
+                        senha : senha
+                    }
+                }
+                //console.log(JSON.stringify(obj_Json));
+                const uri = '/logar';
+                fetch (uri, {
+                    method: "POST",
+                    body: JSON.stringify(obj_Json)
+                }).then((resposta_backEnd)=>{
+                    return resposta_backEnd.text();
+                }).then((tempo_resposta_back)=>{
+                    console.log(tempo_resposta_back);
+                    processarResultados(tempo_resposta_back);
+                }).catch((error)=>{
+                    console.log(error);
+                });
+                function processarResultados(texto_Json){
+                    const obj_Json = JSON.parse(texto_Json);
+
+                    if(obj_Json.status == false){
+                        const retorno_Resposta = document.createTextNode("Email ou Senha Inválidos");
+                        divResposta.appendChild(retorno_Resposta);
+                    }else{
+                        localStorage.setItem("dados", texto_Json);
+                        window.location.href = "Painel.html";
+                    }
+                }
+            }
+        </script>
+    </body>
+</html>
